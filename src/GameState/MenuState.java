@@ -6,24 +6,27 @@ import Tiles.Background;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 
 public class MenuState extends GameState{
 
     private int currentChoice = 0;
     private String[] options = {"Start", "Quit"};
-    private Font titleFont = new Font(null, Font.PLAIN, 80);
-    private Font font = new Font(null, Font.PLAIN, 35);
+    private Font titleFont;
+    private Font font = new Font(null, Font.PLAIN, 40);
     private Background bg;
     private Image image;
 
-    public MenuState(GameStateManager gsm) {
+    MenuState(GameStateManager gsm) {
         this.gsm = gsm;
 
 
         try{
             bg = new Background("clouds.png", 0);
             bg.setVector(-1, 0);
-            image = ImageIO.read(getClass().getResourceAsStream("bgMenu.png"));
+            image = ImageIO.read(getClass().getResourceAsStream("bgMenu.png")).getScaledInstance(GamePanel.WIDTH, GamePanel. HEIGHT, Image.SCALE_SMOOTH);
+            InputStream is = getClass().getResourceAsStream("lunchds.ttf");
+            titleFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(125f);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -44,9 +47,9 @@ public class MenuState extends GameState{
         g.drawImage(image,0,0,null);
         bg.render(g);
 
-        g.setColor(Color.ORANGE);
+        g.setColor(Color.darkGray);
         g.setFont(titleFont);
-        g.drawString("GAME", GamePanel.WIDTH/2-130, 250);
+        g.drawString("GAME", GamePanel.WIDTH/2-145, 300);
 
         g.setFont(font);
         for(int i = 0; i < options.length; i++){
