@@ -23,6 +23,7 @@ public class GameStateManager {
         currentState = state;
         gameStates.get(currentState).init();
     }
+    //
 
     public void update(){
         gameStates.get(currentState).update();
