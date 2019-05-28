@@ -15,6 +15,7 @@ public class MenuState extends GameState{
     private Font titleFont;
     private Font font = new Font(null, Font.PLAIN, 40);
     private Background bg;
+    private Background bg2;
     private Image image;
 
     MenuState(GameStateManager gsm) {
@@ -22,9 +23,9 @@ public class MenuState extends GameState{
 
 
         try{
-            bg = new Background("clouds.png", 0);
+            bg = new Background("/Resources/clouds.png", 0);
             bg.setVector(-1, 0);
-            image = ImageIO.read(getClass().getResourceAsStream("bgMenu.png")).getScaledInstance(GamePanel.WIDTH, GamePanel. HEIGHT, Image.SCALE_SMOOTH);
+            image = ImageIO.read(getClass().getResourceAsStream("/Resources/bgMenu.png")).getScaledInstance(GamePanel.WIDTH, GamePanel. HEIGHT, Image.SCALE_SMOOTH);
             InputStream is = getClass().getResourceAsStream("lunchds.ttf");
             titleFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(125f);
         }
@@ -49,17 +50,18 @@ public class MenuState extends GameState{
 
         g.setColor(Color.darkGray);
         g.setFont(titleFont);
-        g.drawString("GAME", GamePanel.WIDTH/2-145, 300);
+        g.drawString("GAME", GamePanel.WIDTH/2-g.getFontMetrics().stringWidth("GAME")/2, 300);
 
         g.setFont(font);
         for(int i = 0; i < options.length; i++){
             if (i == currentChoice) {
-                g.setColor(Color.CYAN);
+                g.setColor(Color.GRAY);
             }
             else {
                 g.setColor(Color.white);
             }
-            g.drawString(options[i], GamePanel.WIDTH/2 - 50, 500 + i *70);
+
+            g.drawString(options[i], GamePanel.WIDTH/2 - g.getFontMetrics().stringWidth(options[i])/2, 500 + i *70);
         }
     }
 

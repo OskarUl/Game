@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Background {
-    private BufferedImage image;
+    private Image image;
 
     private double x, y, dx, dy;
 
@@ -16,7 +16,7 @@ public class Background {
     public Background (String s , double ms) {
 
         try {
-            image = ImageIO.read(getClass().getResourceAsStream(s));
+            image = ImageIO.read(getClass().getResourceAsStream(s)).getScaledInstance(GamePanel.WIDTH, GamePanel. HEIGHT, Image.SCALE_SMOOTH);
             moveScale = ms;
         }
         catch (Exception e) {
