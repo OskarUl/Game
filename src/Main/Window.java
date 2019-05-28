@@ -1,9 +1,8 @@
 package Main;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class Main {
+public class Window {
     public static void main(String[] args) {
         JFrame window = new JFrame();
         window.setContentPane(new GamePanel());

@@ -4,7 +4,6 @@ import Main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Background {
     private Image image;
@@ -50,5 +49,6 @@ public class Background {
             x = x - GamePanel.WIDTH;
             g.drawImage(image, (int)x, (int)y, null);
         }
+
     }
 }
