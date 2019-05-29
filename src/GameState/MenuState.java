@@ -16,6 +16,7 @@ public class MenuState extends GameState{
     private String[] options = {"Start", "Controls", "Quit"};
     private Font titleFont;
     private Font font;
+    private Background bg2;
     private Background bg;
     private Image[] images = new Image[5];
     private Animator animator;
@@ -35,6 +36,8 @@ public class MenuState extends GameState{
             player.runRight();
             bg = new Background("/Resources/clouds.png", 0);
             bg.setVector(-1, 0);
+            bg2 = new Background("/Resources/MenuBg.png", 1);
+            bg2.setVector(-0.5,0);
             image = ImageIO.read(getClass().getResourceAsStream("/Resources/bgMenu.png")).getScaledInstance(GamePanel.WIDTH, GamePanel. HEIGHT, Image.SCALE_SMOOTH);
             InputStream is = getClass().getResourceAsStream("/Resources/lunchds.ttf");
             font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(40f);
@@ -52,14 +55,15 @@ public class MenuState extends GameState{
     @Override
     public void update() {
         bg.update();
+        bg2.update();
         player.update();
     }
 
     @Override
     public void render(Graphics2D g) {
         g.drawImage(image,0,0,null);
+        bg2.render(g);
         bg.render(g);
-
         player.render(g);
 
         g.setColor(Color.darkGray);
