@@ -68,7 +68,7 @@ public class MenuState extends GameState{
 
         g.setColor(Color.darkGray);
         g.setFont(titleFont);
-        g.drawString("GAME", GamePanel.WIDTH/2-g.getFontMetrics().stringWidth("GAME")/2, 300);
+        g.drawString("GAME", GamePanel.WIDTH/2-g.getFontMetrics().stringWidth("GAME")/2, (int) (GamePanel.HEIGHT * 0.2));
 
         g.setFont(font);
         for(int i = 0; i < options.length; i++){
@@ -79,7 +79,7 @@ public class MenuState extends GameState{
                 g.setColor(Color.GRAY);
             }
 
-            g.drawString(options[i], GamePanel.WIDTH/2 - g.getFontMetrics().stringWidth(options[i])/2, 500 + i * 70);
+            g.drawString(options[i], GamePanel.WIDTH/2 - g.getFontMetrics().stringWidth(options[i])/2, (int) (GamePanel.HEIGHT * 0.4) + i * 70);
         }
     }
 
