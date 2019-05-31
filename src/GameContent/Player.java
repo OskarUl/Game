@@ -13,7 +13,7 @@ public class Player {
     private Image[] runLeft = new Image[5];
     private Image[] runRight = new Image[5];
     private int height = (int)(GamePanel.HEIGHT * 0.3);
-    private int width = (int)(GamePanel.WIDTH * 0.3);
+    private int width = (int)(GamePanel.WIDTH * 0.2);
     private Animator animator;
 
     public Player(){
