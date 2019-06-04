@@ -30,12 +30,12 @@ public class Player {
     }
 
     public void runRight(){
-        //animator = new Animator(runRight , 0, 800);
+        animator = new Animator(runRight , (int) animator.getX(), (int)(GamePanel.HEIGHT * 0.7));
         animator.setVector(20, 0 );
     }
 
     public void runLeft(){
-        //animator = new Animator(runLeft , 0, 800);
+        animator = new Animator(runLeft , (int) animator.getX(), (int)(GamePanel.HEIGHT * 0.7));
         animator.setVector(-20, 0 );
     }
 

@@ -43,6 +43,10 @@ public class Animator {
         this.dy = dy;
     }
 
+    public double getX(){
+        return x;
+    }
+
     public void render(Graphics2D g) {
         g.drawImage(images[imageState], (int) x, (int) y, null);
         if (x < 0) {

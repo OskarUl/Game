@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 public class FirstState extends GameState{
     Image image;
     Player player;
+    boolean bPressed = false;
     public FirstState(GameStateManager gsm) {
         this.gsm = gsm;
         try {
@@ -29,6 +30,7 @@ public class FirstState extends GameState{
 
     @Override
     public void update() {
+        if (bPressed)
         player.update();
     }
 
@@ -40,16 +42,28 @@ public class FirstState extends GameState{
 
     @Override
     public void keyPressed(int k) {
-        if (KeyEvent.VK_LEFT == k) {
-            player.runLeft();
-        }
-        if (KeyEvent.VK_RIGHT == k) {
-            player.runRight();
+        if (!bPressed) {
+            if (KeyEvent.VK_A == k) {
+                player.runLeft();
+                bPressed = true;
+            }
+            if (KeyEvent.VK_D == k) {
+                player.runRight();
+                bPressed = true;
+            }
+            if (KeyEvent.VK_SPACE == k) {
+                player.jump();
+                bPressed = true;
+            }
+            if (KeyEvent.VK_Q == k) {
+                player.attack();
+                bPressed = true;
+            }
         }
     }
 
     @Override
     public void keyReleased(int k) {
-
+        bPressed = false;
     }
 }
