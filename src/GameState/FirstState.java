@@ -30,7 +30,7 @@ public class FirstState extends GameState{
 
     @Override
     public void update() {
-        if (bPressed)
+        //if (bPressed)
         player.update();
     }
 
@@ -38,6 +38,8 @@ public class FirstState extends GameState{
     public void render(Graphics2D g) {
         g.drawImage(image, 0, 0, null);
         player.render(g);
+        g.drawString("Stamina: " + Integer.toString(player.stamina), 20,60);
+        g.drawString("Health: " + Integer.toString(player.health), 20,120);
     }
 
     @Override
@@ -65,5 +67,6 @@ public class FirstState extends GameState{
     @Override
     public void keyReleased(int k) {
         bPressed = false;
+        player.puff();
     }
 }
