@@ -5,11 +5,12 @@ import Main.GamePanel;
 import java.awt.*;
 
 public class Animator {
-    int imageState = 0;
-    Image[] images;
-    int length;
-    double x, y, dx, dy;
-    boolean rewind = false;
+    private int imageState = 0;
+    private Image[] images;
+    private int length;
+    private double x, y, dx, dy;
+    private boolean rewind = false;
+    private boolean run = false;
 
     public Animator(Image[] images, int x, int y) {
         this.x = x;
@@ -19,23 +20,33 @@ public class Animator {
     }
 
     public void update() {
-        if (!rewind) {
-            imageState++;
-            if (imageState > length) {
-                rewind = true;
-                imageState--;
-            }
-        } else {
-            imageState--;
-            if (imageState < 0) {
-                rewind = false;
+        if (run) {
+            if (!rewind) {
                 imageState++;
+                if (imageState > length) {
+                    rewind = true;
+                    imageState--;
+                }
+            } else {
+                imageState--;
+                if (imageState < 0) {
+                    rewind = false;
+                    imageState++;
+                }
             }
+
+            x += dx;
+            y += dy;
         }
 
-        x += dx;
-        y += dy;
+    }
 
+    public void start() {
+        run = true;
+    }
+
+    public void stop() {
+        run = false;
     }
 
     public void setVector(double dx, double dy) {
@@ -45,6 +56,10 @@ public class Animator {
 
     public double getX(){
         return x;
+    }
+
+    public double getY(){
+        return y;
     }
 
     public void render(Graphics2D g) {

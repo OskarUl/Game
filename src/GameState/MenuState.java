@@ -21,7 +21,6 @@ public class MenuState extends GameState{
     private Image[] images = new Image[5];
     private Animator animator;
     private Player player;
-    private Image image;
 
     MenuState(GameStateManager gsm) {
         this.gsm = gsm;
@@ -38,7 +37,6 @@ public class MenuState extends GameState{
             bg.setVector(-1, 0);
             bg2 = new Background("/Resources/MenuBg.png", 1);
             bg2.setVector(-0.5,0);
-            image = ImageIO.read(getClass().getResourceAsStream("/Resources/bgMenu.png")).getScaledInstance(GamePanel.WIDTH, GamePanel. HEIGHT, Image.SCALE_SMOOTH);
             InputStream is = getClass().getResourceAsStream("/Resources/lunchds.ttf");
             font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(40f);
 
@@ -61,7 +59,6 @@ public class MenuState extends GameState{
 
     @Override
     public void render(Graphics2D g) {
-        g.drawImage(image,0,0,null);
         bg2.render(g);
         bg.render(g);
         player.render(g);
