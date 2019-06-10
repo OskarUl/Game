@@ -23,6 +23,11 @@ public class FirstState extends GameState {
 
     public FirstState(GameStateManager gsm) {
         this.gsm = gsm;
+        init();
+    }
+
+    @Override
+    public void init() {
         try {
             bgSea = new Background("/Resources/GameState1BG.png", 0);
             bgClouds = new Background("/Resources/clouds.png", 5);
@@ -30,14 +35,10 @@ public class FirstState extends GameState {
             bgPlatform = new Background("/Resources/stoneflor.png", 5);
             player = new Player();
             player.useStamina(true);
+            player.setPosition(GamePanel.WIDTH * 0.5, GamePanel.HEIGHT * 0.85);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void init() {
-
     }
 
     @Override
@@ -61,11 +62,16 @@ public class FirstState extends GameState {
 
     @Override
     public void keyPressed(int k) {
-        activeKeys.add(k);
+        if (k == KeyEvent.VK_LEFT) player.setLeft(true);
+        if (k == KeyEvent.VK_RIGHT) player.setRight(true);
+        if (k == KeyEvent.VK_SPACE) player.setJumping(true);
+        if (k == KeyEvent.VK_Q) player.setAttacking(true);
+
+        /*activeKeys.add(k);
         activeKeys.forEach(key -> {
             switch ((int) key) {
                 case KeyEvent.VK_D:
-                    player.runRight();
+                    //player.runRight();
                     bgSea.setVector(-1, 0);
                     bgClouds.setVector(-1.5, 0);
                     bgPlatform.setVector(-20, 0);
@@ -74,7 +80,7 @@ public class FirstState extends GameState {
         });
 
         if (KeyEvent.VK_A == k) {
-            player.runLeft();
+            //player.runLeft();
             bgSea.setVector(1, 0);
             bgClouds.setVector(0.5, 0);
             bgPlatform.setVector(20, 0);
@@ -84,21 +90,25 @@ public class FirstState extends GameState {
 
         }
         if (KeyEvent.VK_SPACE == k) {
-            player.jump();
+            //player.jump();
             bPressed = true;
         }
         if (KeyEvent.VK_Q == k) {
-            player.attack();
+            //player.attack();
             bPressed = true;
-        }
+        }*/
     }
 
 
 
     @Override
     public void keyReleased(int k) {
-        activeKeys.remove((Object) k);
-        bPressed = false;
-        player.puff();
+        if (k == KeyEvent.VK_LEFT) player.setLeft(false);
+        if (k == KeyEvent.VK_RIGHT) player.setRight(false);
+        if (k == KeyEvent.VK_SPACE) player.setJumping(false);
+        if (k == KeyEvent.VK_Q) player.setAttacking(false);
+        //activeKeys.remove((Object) k);
+        //bPressed = false;
+        //player.puff();
     }
 }

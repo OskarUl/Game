@@ -3,83 +3,79 @@ package GameContent;
 import Main.GamePanel;
 import Tiles.Animator;
 import Tiles.Timer;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 
-public class Player {
+public class Player extends ObjectMap{
     public int health = 100;
     public int stamina = 100;
     private boolean useStamina = false;
-    private Image[] runLeft = new Image[7];
-    private Image[] runRight = new Image[7];
-    private int x, y, dx, dy;
-    private int height = (int)(GamePanel.HEIGHT * 0.3);
-    private int width = (int)(GamePanel.WIDTH * 0.2);
-    Timer timer = new Timer(80);
+    private BufferedImage[] runLeft = new BufferedImage[7];
+    private BufferedImage[] runRight = new BufferedImage[7];
+    private Timer timer = new Timer(80);
     private boolean puffing = false;
-    private Animator animator;
+    private boolean dead;
 
-    private final String SOUNDPATH = "C:\\Users\\Hule-Elev\\IdeaProjects\\Game1\\src\\Resources\\Sounds\\";
+    private Animator animator;
+    private ArrayList<BufferedImage[]> sprites;
+    private final int[] numImages = {1, 6, 1, 1, 1};
+
+    private static final int IDLE = 0;
+    private static final int WALKING = 1;
+    private static final int JUMPING = 2;
+    private static final int ATTACKING = 3;
+    private static final int FALLING = 4;
+
+    private boolean idle, walking, jumping, falling, attacking;
+
 
     public Player(){
-        try {
-            for (int i = 0; i < 7; i++) {
-                runRight[i] = ImageIO.read(getClass().getResourceAsStream("/Resources/ManAnimation/RunningRight/runningRight" + i + ".png")).getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                runLeft[i] = ImageIO.read(getClass().getResourceAsStream("/Resources/ManAnimation/RunningLeft/runningLeft" + i + ".png")).getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            }
-            timer.start();
-            animator = new Animator(runRight , GamePanel.HEIGHT/2, (int)(GamePanel.HEIGHT * 0.7));
+        collisionHeight = 30;
+        collisionWidth = 20;
 
+        width = 300;
+        height = 400;
+
+        acceleration = 0.1;
+        maxSpeed = 10;
+        deceleration = 0.8;
+        gravitation = 0;
+        jumpHeight = 0;
+        maxFallSpeed = 0;
+
+        try {
+            sprites = new ArrayList<BufferedImage[]>();
+            for (int i = 0; i < 5; i++){
+                BufferedImage[] bi = new BufferedImage[numImages[i]];
+                for (int a = 0; a < numImages[i]; a++) {
+
+                    bi[a] = ImageIO.read(getClass().getResourceAsStream("/Resources/ManAnimation/RunningRight/runningRight" + a + ".png"));
+                    //runLeft[a] = ImageIO.read(getClass().getResourceAsStream("/Resources/ManAnimation/RunningLeft/runningLeft" + a + ".png"));
+                }
+                sprites.add(bi);
+            }
+
+            animator = new Animator();
+            currentAction = IDLE;
+            animator.setImages(sprites.get(IDLE));
+            animator.setDelay(-1);
+
+            //timer.start();
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public void runRight(){
-        animator = new Animator(runRight , (int) animator.getX(), (int)animator.getY());
-        //animator.setVector(20, 0 );
-        animator.start();
-        puffing = false;
-
-    }
-
-    public void runLeft(){
-        animator = new Animator(runLeft , (int) animator.getX(), (int) animator.getY());
-        //animator.setVector(-20, 0 );
-        animator.start();
-        puffing = false;
-    }
-
-    public void puff(){
-        if (stamina < 10) {
-            playSound("impact.wav");
-        }
-        if (animator.getY() < 537) {
-            animator.setVector(0,  5);
-        } else {
-            animator.setVector(0,0);
-        }
-        animator.start();
-        puffing = true;
-    }
-
-    public void jump(){
-        animator.setVector(0, -5);
-        animator.start();
-        puffing = false;
-    }
-
-    public void attack(){
-        puffing = false;
-    }
-
-    private void playSound(String soundString) {
+   /* private void playSound(String soundString) {
         try {
             File sound = new File(SOUNDPATH + soundString);
             Clip clip = AudioSystem.getClip();
@@ -89,6 +85,10 @@ public class Player {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }*/
+
+    public void setAttacking(boolean b) {
+        attacking = b;
     }
 
 
@@ -96,8 +96,52 @@ public class Player {
         this.useStamina = useStamina;
     }
 
+    public void getNextPosition() {
+
+        if (left) {
+            dx -= acceleration;
+            if (dx < -maxSpeed) {
+                dx = -maxSpeed;
+            }
+        }
+        else if (right) {
+            dx += acceleration;
+            if (dx > maxSpeed) {
+                dx = maxSpeed;
+            }
+        }
+        else  {
+            if (dx > 0) {
+                dx -= deceleration;
+                if(dx < 0) {
+                    dx = 0;
+                }
+            }
+            else if (dx < 0) {
+                dx += deceleration;
+                if(dx > 0) {
+                    dx = 0;
+                }
+            }
+        }
+
+        if(jumping && !falling) {
+            dy = jumpHeight;
+            falling = true;
+        }
+
+        if(falling) {
+            dy += gravitation;
+            if (dy > maxFallSpeed) {
+                dy = maxFallSpeed;
+            }
+        }
+        x += dx;
+        y += dy;
+    }
+
     public void update() {
-        if (useStamina) {
+        /*if (useStamina) {
             if (stamina == 0) puff();
             if(timer.isDone()){
                 if (puffing && stamina < 100){
@@ -110,11 +154,67 @@ public class Player {
         }
         animator.update();
         x += dx;
-        y += dy;
+        y += dy;*/
+
+
+
+
+        getNextPosition();
+        setPosition(x, y);
+
+        if (left || right){
+            if(currentAction!=WALKING){
+                currentAction = WALKING;
+                animator.setImages(sprites.get(WALKING));
+                animator.setDelay(50);
+            }
+        }
+        else if(jumping){
+            if(currentAction!=JUMPING){
+                currentAction = JUMPING;
+                animator.setImages(sprites.get(JUMPING));
+                animator.setDelay(-1);
+            }
+        }
+        else if(attacking){
+            if(currentAction!=ATTACKING){
+                currentAction = ATTACKING;
+                animator.setImages(sprites.get(ATTACKING));
+                animator.setDelay(-1);
+            }
+        }
+        else if(falling){
+            if(currentAction!=FALLING){
+                currentAction = FALLING;
+                animator.setImages(sprites.get(FALLING));
+                animator.setDelay(-1);
+            }
+        }
+        else {
+            if(currentAction!=IDLE){
+                currentAction = IDLE;
+                animator.setImages(sprites.get(IDLE));
+                animator.setDelay(-1);
+            }
+        }
+
+        animator.update();
+
+        if(right) {
+            facingRight = true;
+        }
+        if(left) {
+            facingRight = false;
+        }
     }
 
     public void render(Graphics2D g) {
-        animator.render(g);
+        if(facingRight) {
+            g.drawImage(animator.getImage(), (int)(x - width/2) + height,(int)(y - height/2), width, height, null);
+        } else {
+            g.drawImage(animator.getImage(), (int)(x - width/2) + height,(int)(y - height/2), -width, height, null);
+        }
+        //animator.render(g);
 
     }
 

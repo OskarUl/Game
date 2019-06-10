@@ -2,75 +2,60 @@ package Tiles;
 
 import Main.GamePanel;
 
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Animator {
     private int imageState = 0;
-    private Image[] images;
+    private BufferedImage[] images;
     private int length;
     private double x, y, dx, dy;
-    private boolean rewind = false;
+    private boolean rewind;
     private boolean run = false;
+    private long startTime;
+    private long delay;
 
-    public Animator(Image[] images, int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Animator() {
+
+    }
+
+    public void setImages(BufferedImage[] images) {
         this.images = images;
+        imageState = 0;
+        rewind = false;
+        startTime = System.nanoTime();
         length = images.length - 1;
     }
 
+    public void setDelay (long d) {
+        delay = d;
+    }
+
     public void update() {
-        if (run) {
+
+        if(delay == -1) return;
+
+        long elapsed = (System.nanoTime() - startTime) / 1000000;
+        if (elapsed > delay) {
             if (!rewind) {
                 imageState++;
-                if (imageState > length) {
+                if (imageState == length) {
                     rewind = true;
-                    imageState--;
                 }
             } else {
                 imageState--;
-                if (imageState < 0) {
+                if (imageState == 0) {
                     rewind = false;
-                    imageState++;
                 }
             }
+            if(imageState < 0) imageState++;
 
-            x += dx;
-            y += dy;
+                startTime = System.nanoTime();
         }
-
     }
 
-    public void start() {
-        run = true;
-    }
-
-    public void stop() {
-        run = false;
-    }
-
-    public void setVector(double dx, double dy) {
-        this.dx = dx;
-        this.dy = dy;
-    }
-
-    public double getX(){
-        return x;
-    }
-
-    public double getY(){
-        return y;
-    }
-
-    public void render(Graphics2D g) {
-        g.drawImage(images[imageState], (int) x, (int) y, null);
-        if (x < 0) {
-            x = x + GamePanel.WIDTH;
-            g.drawImage(images[imageState], (int) x, (int) y, null);
-        }
-        if (x > 0) {
-            x = x - GamePanel.WIDTH;
-            g.drawImage(images[imageState], (int) x, (int) y, null);
-        }
+    public BufferedImage getImage() {
+        return images[imageState];
     }
 }

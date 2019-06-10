@@ -1,6 +1,6 @@
 package GameContent;
 
-public class Seagull {
+public class Seagull extends ObjectMap {
     int health = 100;
     boolean confused;
     private int posX;

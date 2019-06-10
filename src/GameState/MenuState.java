@@ -8,6 +8,7 @@ import Tiles.Background;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 public class MenuState extends GameState{
@@ -18,21 +19,19 @@ public class MenuState extends GameState{
     private Font font;
     private Background bg2;
     private Background bg;
-    private Image[] images = new Image[5];
-    private Animator animator;
-    private Player player;
+    private BufferedImage[] images = new BufferedImage[5];
+
 
     MenuState(GameStateManager gsm) {
         this.gsm = gsm;
 
         try{
             for (int i= 0; i < 5; i++) {
-                images[i] = ImageIO.read(getClass().getResourceAsStream("/Resources/ManAnimation/RunningLeft/runningLeft" + i + ".png")).getScaledInstance(400, 600, Image.SCALE_SMOOTH);
+                images[i] = ImageIO.read(getClass().getResourceAsStream("/Resources/ManAnimation/RunningLeft/runningLeft" + i + ".png"));
             }
-            animator = new Animator(images , 0, 800);
-            animator.setVector(20, 0 );
-            player = new Player();
-            player.runRight();
+            //animator = new Animator(images , 0, 800);
+            //animator.setVector(20, 0 );
+            //player.runRight();
             bg = new Background("/Resources/clouds.png", 0);
             bg.setVector(-1, 0);
             bg2 = new Background("/Resources/MenuBg.png", 1);
@@ -54,14 +53,12 @@ public class MenuState extends GameState{
     public void update() {
         bg.update();
         bg2.update();
-        player.update();
     }
 
     @Override
     public void render(Graphics2D g) {
         bg2.render(g);
         bg.render(g);
-        player.render(g);
 
 
         g.setColor(Color.darkGray);
