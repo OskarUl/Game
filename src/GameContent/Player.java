@@ -15,8 +15,8 @@ public class Player {
     public int health = 100;
     public int stamina = 100;
     private boolean useStamina = false;
-    private Image[] runLeft = new Image[5];
-    private Image[] runRight = new Image[5];
+    private Image[] runLeft = new Image[7];
+    private Image[] runRight = new Image[7];
     private int x, y, dx, dy;
     private int height = (int)(GamePanel.HEIGHT * 0.3);
     private int width = (int)(GamePanel.WIDTH * 0.2);
@@ -28,12 +28,12 @@ public class Player {
 
     public Player(){
         try {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 7; i++) {
                 runRight[i] = ImageIO.read(getClass().getResourceAsStream("/Resources/ManAnimation/RunningRight/runningRight" + i + ".png")).getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 runLeft[i] = ImageIO.read(getClass().getResourceAsStream("/Resources/ManAnimation/RunningLeft/runningLeft" + i + ".png")).getScaledInstance(width, height, Image.SCALE_SMOOTH);
             }
             timer.start();
-            animator = new Animator(runRight , 0, (int)(GamePanel.HEIGHT * 0.7));
+            animator = new Animator(runRight , GamePanel.HEIGHT/2, (int)(GamePanel.HEIGHT * 0.7));
 
         }
         catch (Exception e){
@@ -43,7 +43,7 @@ public class Player {
 
     public void runRight(){
         animator = new Animator(runRight , (int) animator.getX(), (int)animator.getY());
-        animator.setVector(20, 0 );
+        //animator.setVector(20, 0 );
         animator.start();
         puffing = false;
 
@@ -51,7 +51,7 @@ public class Player {
 
     public void runLeft(){
         animator = new Animator(runLeft , (int) animator.getX(), (int) animator.getY());
-        animator.setVector(-20, 0 );
+        //animator.setVector(-20, 0 );
         animator.start();
         puffing = false;
     }
